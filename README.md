@@ -1,0 +1,1 @@
+# fratomo_grip_moveit_configuration

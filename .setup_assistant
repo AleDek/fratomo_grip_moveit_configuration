@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: fratomo_description
+    relative_path: urdf/fratomo.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/testbot.srdf
+  CONFIG:
+    author_name: ale
+    author_email: ale-dc@live.it
+    generated_timestamp: 1618344669

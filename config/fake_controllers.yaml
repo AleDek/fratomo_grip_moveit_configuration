@@ -1,0 +1,24 @@
+controller_list:
+  - name: fake_arm_controller
+    joints:
+      - torso_to_shoulder
+      - shoulder_to_arm_l1
+      - arm_l1_to_forearm
+      - forearm_to_wrist_shaft
+      - wrist_shaft_to_wrist
+      - wrist_to_gripper
+  - name: fake_hand_controller
+    joints:
+      - gripper_to_finger_l
+  - name: fake_head_controller
+    joints:
+      - torso_to_neck
+      - neck_to_head
+  - name: fake_cam_ee_controller
+    joints:
+      []
+initial:  # Define initial robot poses.
+  - group: arm
+    pose: center
+  - group: hand
+    pose: close

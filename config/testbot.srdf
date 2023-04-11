@@ -1,0 +1,112 @@
+<?xml version="1.0" ?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="testbot">
+    <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+    <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
+    <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
+    <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
+    <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
+    <group name="arm">
+        <joint name="base_to_turnable" />
+        <joint name="turnable_to_torso" />
+        <joint name="torso_to_shoulder" />
+        <joint name="shoulder_to_arm_l1" />
+        <joint name="arm_l1_to_forearm" />
+        <joint name="forearm_to_wrist_shaft" />
+        <joint name="wrist_shaft_to_wrist" />
+        <joint name="wrist_to_gripper" />
+    </group>
+    <group name="hand">
+        <joint name="gripper_to_finger_r" />
+        <joint name="gripper_to_finger_l" />
+        <joint name="gripper_to_end_effector" />
+    </group>
+    <group name="head">
+        <joint name="base_to_turnable" />
+        <joint name="turnable_to_torso" />
+        <joint name="torso_to_neck" />
+        <joint name="neck_to_head" />
+        <joint name="head_to_camera" />
+    </group>
+    <group name="cam_ee">
+        <joint name="head_to_camera" />
+    </group>
+    <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="center" group="arm">
+        <joint name="arm_l1_to_forearm" value="0" />
+        <joint name="forearm_to_wrist_shaft" value="0" />
+        <joint name="shoulder_to_arm_l1" value="0" />
+        <joint name="torso_to_shoulder" value="0" />
+        <joint name="wrist_shaft_to_wrist" value="0" />
+        <joint name="wrist_to_gripper" value="0.003" />
+    </group_state>
+    <group_state name="close" group="hand">
+        <joint name="gripper_to_finger_l" value="0" />
+        <joint name="gripper_to_finger_r" value="0" />
+    </group_state>
+    <group_state name="open" group="hand">
+        <joint name="gripper_to_finger_l" value="0.02" />
+        <joint name="gripper_to_finger_r" value="0" />
+    </group_state>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="hand" parent_link="wrist" group="hand" parent_group="arm" />
+    <end_effector name="headcam" parent_link="camera" group="cam_ee" parent_group="head" />
+    <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="arm_l1" link2="base_link" reason="Never" />
+    <disable_collisions link1="arm_l1" link2="camera" reason="Never" />
+    <disable_collisions link1="arm_l1" link2="end_effector" reason="Never" />
+    <disable_collisions link1="arm_l1" link2="forearm" reason="Adjacent" />
+    <disable_collisions link1="arm_l1" link2="head" reason="Never" />
+    <disable_collisions link1="arm_l1" link2="neck" reason="Never" />
+    <disable_collisions link1="arm_l1" link2="shoulder" reason="Adjacent" />
+    <disable_collisions link1="arm_l1" link2="torso" reason="Never" />
+    <disable_collisions link1="arm_l1" link2="turnable" reason="Never" />
+    <disable_collisions link1="base_link" link2="camera" reason="Never" />
+    <disable_collisions link1="base_link" link2="forearm" reason="Never" />
+    <disable_collisions link1="base_link" link2="head" reason="Never" />
+    <disable_collisions link1="base_link" link2="neck" reason="Never" />
+    <disable_collisions link1="base_link" link2="shoulder" reason="Never" />
+    <disable_collisions link1="base_link" link2="torso" reason="Never" />
+    <disable_collisions link1="base_link" link2="turnable" reason="Adjacent" />
+    <disable_collisions link1="camera" link2="head" reason="Adjacent" />
+    <disable_collisions link1="camera" link2="neck" reason="Never" />
+    <disable_collisions link1="camera" link2="shoulder" reason="Never" />
+    <disable_collisions link1="camera" link2="torso" reason="Never" />
+    <disable_collisions link1="camera" link2="turnable" reason="Never" />
+    <disable_collisions link1="end_effector" link2="finger_l" reason="Default" />
+    <disable_collisions link1="end_effector" link2="finger_r" reason="Default" />
+    <disable_collisions link1="end_effector" link2="forearm" reason="Never" />
+    <disable_collisions link1="end_effector" link2="gripper" reason="Adjacent" />
+    <disable_collisions link1="end_effector" link2="wrist" reason="Never" />
+    <disable_collisions link1="end_effector" link2="wrist_shaft" reason="Never" />
+    <disable_collisions link1="finger_l" link2="finger_r" reason="Default" />
+    <disable_collisions link1="finger_l" link2="forearm" reason="Never" />
+    <disable_collisions link1="finger_l" link2="gripper" reason="Adjacent" />
+    <disable_collisions link1="finger_l" link2="wrist" reason="Never" />
+    <disable_collisions link1="finger_l" link2="wrist_shaft" reason="Never" />
+    <disable_collisions link1="finger_r" link2="forearm" reason="Never" />
+    <disable_collisions link1="finger_r" link2="gripper" reason="Adjacent" />
+    <disable_collisions link1="finger_r" link2="wrist" reason="Never" />
+    <disable_collisions link1="finger_r" link2="wrist_shaft" reason="Never" />
+    <disable_collisions link1="forearm" link2="gripper" reason="Never" />
+    <disable_collisions link1="forearm" link2="shoulder" reason="Never" />
+    <disable_collisions link1="forearm" link2="turnable" reason="Never" />
+    <disable_collisions link1="forearm" link2="wrist" reason="Never" />
+    <disable_collisions link1="forearm" link2="wrist_shaft" reason="Adjacent" />
+    <disable_collisions link1="gripper" link2="wrist" reason="Adjacent" />
+    <disable_collisions link1="gripper" link2="wrist_shaft" reason="Never" />
+    <disable_collisions link1="head" link2="neck" reason="Adjacent" />
+    <disable_collisions link1="head" link2="shoulder" reason="Never" />
+    <disable_collisions link1="head" link2="torso" reason="Never" />
+    <disable_collisions link1="head" link2="turnable" reason="Never" />
+    <disable_collisions link1="neck" link2="shoulder" reason="Never" />
+    <disable_collisions link1="neck" link2="torso" reason="Adjacent" />
+    <disable_collisions link1="neck" link2="turnable" reason="Never" />
+    <disable_collisions link1="shoulder" link2="torso" reason="Adjacent" />
+    <disable_collisions link1="shoulder" link2="turnable" reason="Never" />
+    <disable_collisions link1="torso" link2="turnable" reason="Adjacent" />
+    <disable_collisions link1="wrist" link2="wrist_shaft" reason="Adjacent" />
+</robot>
